@@ -13,9 +13,32 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
-  <widget class="QMenuBar" name="menubar"/>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout"/>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuTrees_T">
+    <property name="title">
+     <string>Trees(&amp;T)</string>
+    </property>
+    <addaction name="newTree"/>
+   </widget>
+   <addaction name="menuTrees_T"/>
+  </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="newTree">
+   <property name="text">
+    <string>New Tree(&amp;N)</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
