@@ -23,6 +23,9 @@ public:
     bool addNode(TreeNode *treeNode);
     bool removeNode(int nodeId);
 
+    bool addInfo(TreeInfo *treeInfo);
+    bool removeInfo(int infoId);
+
     QList<int> getRoots();
 
     const QMap<int, TreeNode *> &getNodes() const
