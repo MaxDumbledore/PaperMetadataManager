@@ -31,12 +31,30 @@
     </property>
     <addaction name="newTree"/>
    </widget>
+   <widget class="QMenu" name="menuOpen_O">
+    <property name="title">
+     <string>Open(&amp;O)</string>
+    </property>
+    <addaction name="actionOpen_Dir_O"/>
+    <addaction name="actionRecent_Dirs_R"/>
+   </widget>
+   <addaction name="menuOpen_O"/>
    <addaction name="menuTrees_T"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="newTree">
    <property name="text">
     <string>New Tree(&amp;N)</string>
+   </property>
+  </action>
+  <action name="actionOpen_Dir_O">
+   <property name="text">
+    <string>Open Dir(&amp;O)</string>
+   </property>
+  </action>
+  <action name="actionRecent_Dirs_R">
+   <property name="text">
+    <string>Recent Dirs(&amp;R)</string>
    </property>
   </action>
  </widget>

@@ -3,7 +3,9 @@
 #include <QDebug>
 
 TreeInfo::TreeInfo(QObject *parent)
-    : QObject{parent}
+    : QObject{parent},
+      id(-1),
+      rootNodeId(-1)
 {
 
 }

@@ -33,6 +33,8 @@ public:
         return nodes;
     }
 
+    void reload();
+
 signals:
 protected:
     QMap<int,TreeNode *> nodes;

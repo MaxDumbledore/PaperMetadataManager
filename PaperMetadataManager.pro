@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -9,26 +9,33 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    $$files(Tree/*.cpp) \
+    config.cpp \
+    cstbuttongroup.cpp \
+    globalsettings.cpp \
     main.cpp \
     mainwindow.cpp \
-    tabform.cpp \
+    metadatamanager.cpp \
+    tableform.cpp \
     tester.cpp \
-    treeinfo.cpp \
-    treenode.cpp \
-    treenodemanager.cpp
+    treeform.cpp
 
 HEADERS += \
+    $$files(Tree/*.h) \
     config.h \
+    cstbuttongroup.h \
+    globalsettings.h \
     mainwindow.h \
-    tabform.h \
+    metadatamanager.h \
+    tableform.h \
     tester.h \
-    treeinfo.h \
-    treenode.h \
-    treenodemanager.h
+    tree.h \
+    treeform.h
 
 FORMS += \
     mainwindow.ui \
-    tabform.ui
+    tableform.ui \
+    treeform.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

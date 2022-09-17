@@ -1,7 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TabForm</class>
- <widget class="QWidget" name="TabForm">
+ <author/>
+ <comment/>
+ <exportmacro/>
+ <class>TreeForm</class>
+ <widget class="QWidget" name="TreeForm">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,12 +15,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QTreeView" name="treeView"/>
-   </item>
-  </layout>
  </widget>
- <resources/>
+ <pixmapfunction/>
  <connections/>
 </ui>

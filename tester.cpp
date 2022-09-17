@@ -1,5 +1,5 @@
 ﻿#include "tester.h"
-#include "treenode.h"
+#include "tree.h"
 #include "config.h"
 #include <QDebug>
 

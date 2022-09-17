@@ -4,21 +4,7 @@
 TreeNodeManager::TreeNodeManager(QObject *parent)
     : QObject{parent}
 {
-    QDir dir(Config::getTreePath());
-    auto nodeFileList=dir.entryList({"node*.txt"});
-    auto infoFileList=dir.entryList({"info*.txt"});
-    for(auto &i:qAsConst(nodeFileList))
-    {
-        auto node=new TreeNode();
-        node->loadFromFile(Config::getTreePath()+i);
-        addNode(node);
-    }
-    for(auto &i:qAsConst(infoFileList))
-    {
-        auto info=new TreeInfo();
-        info->loadFromFile(Config::getTreePath()+i);
-        addInfo(info);
-    }
+
 }
 
 bool TreeNodeManager::addNode(TreeNode *treeNode)
@@ -66,6 +52,27 @@ QList<int> TreeNodeManager::getRoots()
         if(i->getNodeParent()==-1)
             roots.append(i->getId());
     return roots;
+}
+
+void TreeNodeManager::reload()
+{
+    nodes.clear();
+    infos.clear();
+    QDir dir(Config::getTreePath());
+    auto nodeFileList=dir.entryList({"node*.txt"});
+    auto infoFileList=dir.entryList({"info*.txt"});
+    for(auto &i:qAsConst(nodeFileList))
+    {
+        auto node=new TreeNode();
+        node->loadFromFile(Config::getTreePath()+i);
+        addNode(node);
+    }
+    for(auto &i:qAsConst(infoFileList))
+    {
+        auto info=new TreeInfo();
+        info->loadFromFile(Config::getTreePath()+i);
+        addInfo(info);
+    }
 }
 
 

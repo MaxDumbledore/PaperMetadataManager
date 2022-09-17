@@ -2,7 +2,7 @@
 
 #include <QApplication>
 #include "config.h"
-#include "treenode.h"
+#include "tree.h"
 #include "tester.h"
 #include <QStyleFactory>
 
@@ -13,8 +13,7 @@ int main(int argc, char *argv[])
     QApplication::setStyle(QStyleFactory::create("fusion"));
     QApplication a(argc, argv);
 //    testTreeNode();
-//    MainWindow w;
-//    w.show();
-    test();
+    MainWindow::getInstance()->show();
+//    test();
     return a.exec();
 }

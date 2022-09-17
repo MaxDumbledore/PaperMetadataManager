@@ -20,14 +20,7 @@ public:
         return true;
     }
 
-    static void setDataRoot(QString _dataRoot){
-        dataRoot=std::move(_dataRoot);
-        treePath=dataRoot+"trees/";
-        paperMetaPath=dataRoot+"meta_db/";
-        create_dir_if_not_exist(dataRoot);
-        create_dir_if_not_exist(treePath);
-        create_dir_if_not_exist(paperMetaPath);
-    }
+    static void setDataRoot(QString _dataRoot);
 
     static const QString & getDataRoot(){
         return dataRoot;
@@ -41,8 +34,12 @@ public:
         return paperMetaPath;
     }
 
+    static const QString & getNotePath(){
+        return notePath;
+    }
+
 private:
-    inline static QString dataRoot,treePath,paperMetaPath;
+    inline static QString dataRoot,treePath,paperMetaPath,notePath;
 };
 
 #endif // CONFIG_H

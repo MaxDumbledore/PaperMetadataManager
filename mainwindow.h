@@ -2,7 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QTabWidget>
+#include "cstbuttongroup.h"
+#include "tableform.h"
+#include "treeform.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,9 +18,32 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private:
-    Ui::MainWindow *ui;
+    static MainWindow *getInstance(){
+        if(instance==nullptr){
+            instance=new MainWindow();
+        }
+        return instance;
+    }
 
-    QTabWidget *tabWidget;
+    void reload();
+private:
+    inline static MainWindow *instance=nullptr;
+
+    Ui::MainWindow *ui;
+    QStringList historyDirs;
+    QString currentDir;
+    CstButtonGroup *cstBtnGroup;
+    QWidget *currentForm;
+    TableForm *tableForm;
+    TreeForm *treeForm;
+
+    void loadOpenDirHistory();
+    void saveOpenDirHistory();
+
+    void playSwitchAnimation(QWidget *page, bool direction);
+
+    void setCurrentDir(const QString &_dir);
+
+    void closeEvent(QCloseEvent *ev) override;
 };
 #endif // MAINWINDOW_H
