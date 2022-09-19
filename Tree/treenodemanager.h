@@ -31,13 +31,19 @@ public:
     void reload();
     void saveAndQuit();
 
-    int getRootId();
+    int getRootId() const
+    {
+        return rootId;
+    }
 
     QStandardItem * buildModelItemRecursively(int curId);
+
+    int findFirstContainedByNodeName(int curId, const QString &s);
 
 signals:
 protected:
     QMap<int,TreeNode *> nodes;
+    int rootId;
     inline static TreeNodeManager *instance=nullptr;
 };
 

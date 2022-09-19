@@ -5,7 +5,8 @@
 #include <QDebug>
 
 TreeNodeManager::TreeNodeManager(QObject *parent)
-    : QObject{parent}
+    : QObject{parent},
+      rootId(-1)
 {
 
 }
@@ -32,6 +33,7 @@ bool TreeNodeManager::removeNode(int nodeId)
 void TreeNodeManager::reload()
 {
     nodes.clear();
+    rootId=-1;
     QDir dir(Config::getTreePath());
     auto aspectFileList=dir.entryList({"aspect*.txt"});
     for(auto &i:qAsConst(aspectFileList))
@@ -47,6 +49,13 @@ void TreeNodeManager::reload()
         node->loadFromFile();
         addNode(node);
     }
+
+    auto localKeys = nodes.keys();
+    for(auto &i:qAsConst(localKeys))
+        if(nodes[i]->getNodeParent()==-1){
+            rootId= i;
+            break;
+        }
 }
 
 void TreeNodeManager::saveAndQuit()
@@ -56,14 +65,7 @@ void TreeNodeManager::saveAndQuit()
         i->saveToFile();
 }
 
-int TreeNodeManager::getRootId()
-{
-    auto localKeys = nodes.keys();
-    for(auto &i:qAsConst(localKeys))
-        if(nodes[i]->getNodeParent()==-1)
-            return i;
-    return -1;
-}
+
 
 QStandardItem *TreeNodeManager::buildModelItemRecursively(int curId)
 {
@@ -77,6 +79,18 @@ QStandardItem *TreeNodeManager::buildModelItemRecursively(int curId)
     for(int i=0;i<childList.size();i++)
         item->setChild(i,0,buildModelItemRecursively(childList.at(i)));
     return item;
+}
+
+int TreeNodeManager::findFirstContainedByNodeName(int curId, const QString &s)
+{
+    if(nodes[curId]->getName().contains(s))
+        return curId;
+    for(auto &i:nodes[curId]->getNodeChilds()){
+        auto r=findFirstContainedByNodeName(i,s);
+        if(r!=-1)
+            return r;
+    }
+    return -1;
 }
 
 

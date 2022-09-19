@@ -31,6 +31,7 @@ void MetaDataManager::reload()
     insertRecordIfNotExist("chinese_abstract","TEXT");
     insertRecordIfNotExist("note_link","TEXT");
     insertRecordIfNotExist("concept_node_ids","TEXT");
+    insertRecordIfNotExist("remarks","TEXT");
 }
 
 void MetaDataManager::saveAndQuit()
@@ -43,6 +44,18 @@ void MetaDataManager::insertRecordIfNotExist(const QString &recordName, const QS
     if(records.contains(recordName))
         return ;
     dbConn.exec(QString("ALTER TABLE papers ADD COLUMN %1 %2").arg(recordName,tp));
+}
+
+int MetaDataManager::getNumOfRows()
+{
+    auto qry=dbConn.exec("SELECT COUNT(1) from papers");
+    qry.next();
+    return qry.value(0).toInt();
+}
+
+void MetaDataManager::addMetaData(const MetaData &data)
+{
+    QString("INSERT INTO papers (id, title, chinese_title, conference, year, document_link, code_link, abstract, chinese_abstract, note_link, concept_node_ids, remarks) VALUES (%1, %2, %3, '', null, '', '', '', '', '', '', '');")
 }
 
 

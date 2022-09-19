@@ -7,6 +7,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include "cstsqlquerymodel.h"
+#include "tableeditdialog.h"
 
 TableForm::TableForm(QWidget *parent) :
     QWidget(parent),
@@ -25,6 +26,15 @@ TableForm::TableForm(QWidget *parent) :
             QDesktopServices::openUrl(QUrl::fromEncoded(index.data().toString().toUtf8()));
         }
     });
+
+    connect(ui->addBtn,&QToolButton::clicked,this,[this](){
+        TableEditDialog dialog({MetaDataManager::getInstance()->getNumOfRows()+1},this);
+        dialog.setWindowTitle(qApp->applicationName()+" - Table Editor");
+        if(dialog.exec()==QDialog::Rejected)
+            return ;
+        MetaData data=dialog.getCollectedData();
+//        MetaDataManager::getInstance()->addMetaData(data);
+    });
 }
 
 TableForm::~TableForm()
@@ -41,14 +51,17 @@ void TableForm::reload()
         fieldNames+=records.fieldName(i);
     auto qryModel=new CstSqlQueryModel(ui->tableView);
     qryModel->setQuery("SELECT * from papers ORDER BY id",conn);
+    int conceptsPos=0;
     for(int i=0;i<fieldNames.size();i++){
         auto title=mapFieldNameToDisplayName(fieldNames.at(i));
         qryModel->setHeaderData(i,Qt::Horizontal,title);
         if(title.right(4)=="Link")
             qryModel->setHeaderData(i,Qt::Horizontal,QColor(Qt::darkBlue),Qt::ForegroundRole);
+        if(title=="Concepts")
+            conceptsPos=i;
     }
     replaceModel(qryModel);
-    ui->tableView->horizontalHeader()->moveSection(records.count()-1,5);
+    ui->tableView->horizontalHeader()->moveSection(conceptsPos,5);
 }
 
 QString TableForm::mapFieldNameToDisplayName(const QString &fieldName)

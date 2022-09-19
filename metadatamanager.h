@@ -5,6 +5,20 @@
 #include <QApplication>
 #include <QSqlDatabase>
 
+struct MetaData{
+    int id;
+    QString title;
+    QString chinese_title;
+    QString conference;
+    int year;
+    QString document_link;
+    QString abstract;
+    QString chinese_abstract;
+    QString note_link;
+    QList<int> concept_node_ids;
+    QString remarks;
+};
+
 class MetaDataManager : public QObject
 {
     Q_OBJECT
@@ -28,6 +42,7 @@ public:
         return dbConn;
     }
 
+    int getNumOfRows();
 
 signals:
 protected:
