@@ -5,6 +5,7 @@
 #include "config.h"
 #include "tree.h"
 #include <QFileDialog>
+#include <QDebug>
 //#include "tabform.h"
 //#include "treenodemanager.h"
 
@@ -61,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
         currentForm=nextForm;
     });
 
+    //do not call MainWindow::getInstance in initializer
 }
 
 MainWindow::~MainWindow()
@@ -72,6 +74,11 @@ void MainWindow::reload()
 {
     tableForm->reload();
     treeForm->reload();
+}
+
+void MainWindow::saveAndQuit()
+{
+    saveOpenDirHistory();
 }
 
 void MainWindow::loadOpenDirHistory()
@@ -104,7 +111,7 @@ void MainWindow::saveOpenDirHistory()
 void MainWindow::playSwitchAnimation(QWidget *page, bool direction)
 {
     auto finalGeometry=page->geometry();
-    page->move(finalGeometry.topLeft()+QPoint(direction?-200:200,0));
+    page->move(finalGeometry.topLeft()+QPoint(direction?-page->width():page->width(),0));
     auto formerGeometry = page->geometry();
     auto appearAnimation = new QPropertyAnimation(page, "geometry");
     appearAnimation->setDuration(200);
@@ -115,14 +122,16 @@ void MainWindow::playSwitchAnimation(QWidget *page, bool direction)
 
 void MainWindow::setCurrentDir(const QString &_dir)
 {
+    if(currentDir==_dir)
+        return ;
     currentDir=_dir;
     Config::setDataRoot(currentDir);
-    //    TreeNodeManager::
+    setWindowTitle(qApp->applicationName()+" - "+currentDir);
 }
 
 void MainWindow::closeEvent(QCloseEvent *ev)
 {
-    saveOpenDirHistory();
+    Config::saveAndQuit();
     QMainWindow::closeEvent(ev);
 }
 

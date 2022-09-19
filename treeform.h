@@ -2,6 +2,7 @@
 #define TREEFORM_H
 
 #include <QWidget>
+#include <QStandardItemModel>
 
 namespace Ui {
 class TreeForm;
@@ -16,6 +17,8 @@ public:
     ~TreeForm();
 
     void reload();
+    void replaceModel(QStandardItemModel *_model);
+
 
 private:
     Ui::TreeForm *ui;

@@ -12,28 +12,31 @@ SOURCES += \
     $$files(Tree/*.cpp) \
     config.cpp \
     cstbuttongroup.cpp \
+    cstsqlquerymodel.cpp \
     globalsettings.cpp \
     main.cpp \
     mainwindow.cpp \
     metadatamanager.cpp \
+    tableeditdialog.cpp \
     tableform.cpp \
-    tester.cpp \
     treeform.cpp
 
 HEADERS += \
     $$files(Tree/*.h) \
     config.h \
     cstbuttongroup.h \
+    cstsqlquerymodel.h \
     globalsettings.h \
     mainwindow.h \
     metadatamanager.h \
+    tableeditdialog.h \
     tableform.h \
-    tester.h \
     tree.h \
     treeform.h
 
 FORMS += \
     mainwindow.ui \
+    tableeditdialog.ui \
     tableform.ui \
     treeform.ui
 

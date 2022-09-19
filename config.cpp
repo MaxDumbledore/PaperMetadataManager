@@ -17,3 +17,12 @@ void Config::setDataRoot(QString _dataRoot){
     MetaDataManager::getInstance()->reload();
     MainWindow::getInstance()->reload();
 }
+
+void Config::saveAndQuit()
+{
+    if(dataRoot.isEmpty())
+        return ;
+    TreeNodeManager::getInstance()->saveAndQuit();
+    MetaDataManager::getInstance()->saveAndQuit();
+    MainWindow::getInstance()->saveAndQuit();
+}

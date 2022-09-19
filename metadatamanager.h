@@ -20,6 +20,7 @@ public:
     }
 
     void reload();
+    void saveAndQuit();
 
     void insertRecordIfNotExist(const QString &recordName, const QString &tp);
     QSqlDatabase &getDbConn()

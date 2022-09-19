@@ -2,17 +2,16 @@
 #define TREENODE_H
 
 #include <QObject>
+#include <QFile>
 
 class TreeNode : public QObject
 {
     Q_OBJECT
 public:
-    explicit TreeNode(QObject *parent = nullptr);
+    explicit TreeNode(QString _nodePath, QObject *parent = nullptr);
 
-    TreeNode(int _id, int _nodeParent, const QString &_name, const QString &_description, const QList<int> &_nodeChilds, QObject *parent=nullptr);
-
-    void loadFromFile(const QString &nodePath);
-    void saveToFile(const QString &nodePath);
+    void loadFromFile();
+    void saveToFile();
 
     int getId() const
     {
@@ -68,6 +67,12 @@ protected:
     int id,nodeParent;
     QString name,description;
     QList<int> nodeChilds;
+
+    QString nodePath;
+    virtual void load(QMap<QString,QString> &dataMap);
+    virtual void save(QFile &file);
+
+    static QPair<QString,QString> readNextItem(QFile &file);;
 };
 
 #endif // TREENODE_H

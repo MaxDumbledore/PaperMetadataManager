@@ -2,23 +2,12 @@
 #include <QFile>
 #include <QDebug>
 
-TreeNode::TreeNode(QObject *parent)
+TreeNode::TreeNode(QString _nodePath, QObject *parent)
     : QObject{parent},
       id(-1),
-      nodeParent(-1)
+      nodeParent(-1),
+      nodePath(std::move(_nodePath))
 {
-
-}
-
-TreeNode::TreeNode(int _id, int _nodeParent, const QString &_name, const QString &_description, const QList<int> &_nodeChilds, QObject *parent):
-    QObject{parent},
-    id(_id),
-    nodeParent(_nodeParent),
-    name(_name),
-    description(_description),
-    nodeChilds(_nodeChilds)
-{
-
 }
 
 QString listIntToString(const QList<int> &l){
@@ -33,35 +22,46 @@ QList<int> stringToListInt(const QString &s){
     auto c=s.split(',');
     QList<int> l;
     for(auto &i:qAsConst(c))
-        l.append(i.toInt());
+        if(!i.isEmpty())
+            l.append(i.toInt());
     return l;
 }
 
-void TreeNode::loadFromFile(const QString &nodePath)
+void TreeNode::loadFromFile()
 {
     QFile file(nodePath);
     file.open(QFile::ReadOnly);
-
-    auto nextItem=[&]() -> QString{
-        auto l=QString(file.readLine()).split('=');
-        if(l.size()!=2){
-            qDebug()<<"Wrong in parse '=' in string!";
-        }
-        return l.back();
-    };
-
-    id=nextItem().toInt();
-    nodeParent=nextItem().toInt();
-    name=nextItem();
-    description=nextItem();
-    nodeChilds=stringToListInt(nextItem());
+    QMap<QString,QString> dataMap;
+    while(!file.atEnd()){
+        auto item=readNextItem(file);
+        if(item.first.isEmpty())
+            continue;
+        dataMap.insert(item.first,item.second);
+    }
+    load(dataMap);
+    file.close();
 }
 
-void TreeNode::saveToFile(const QString &nodePath)
+void TreeNode::saveToFile()
 {
     QFile file(nodePath);
     file.open(QFile::WriteOnly);
+    save(file);
+    file.close();
+}
 
+void TreeNode::load(QMap<QString,QString> &dataMap)
+{
+    id=dataMap["ID"].toInt();
+    nodeParent=dataMap["PARENT_ID"].toInt();
+    name=dataMap["NAME"];
+    description=dataMap["DESCRIPTION"];
+    nodeChilds=stringToListInt(dataMap["CHILD_IDS"]);
+//    qDebug()<<nodeChilds;
+}
+
+void TreeNode::save(QFile &file)
+{
     QString dataStr;
     dataStr.append(QString("ID=%1\n").arg(id));
     dataStr.append(QString("PARENT_ID=%1\n").arg(nodeParent));
@@ -69,7 +69,16 @@ void TreeNode::saveToFile(const QString &nodePath)
     dataStr.append(QString("DESCRIPTION=%1\n").arg(description));
     dataStr.append(QString("CHILD_IDS=%1\n").arg(listIntToString(nodeChilds)));
     file.write(dataStr.toUtf8());
-    file.close();
+}
+
+QPair<QString, QString> TreeNode::readNextItem(QFile &file){
+    auto l=QString(file.readLine()).split('=');
+    if(l.size()!=2){
+        qDebug()<<l<<"Wrong in parse '=' in string!";
+        return {};
+    }
+    l[1].chop(1); //pop \n
+    return {std::move(l.at(0)),std::move(l.at(1))};
 }
 
 

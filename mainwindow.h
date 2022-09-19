@@ -26,6 +26,15 @@ public:
     }
 
     void reload();
+    void saveAndQuit();
+
+    const QStringList &getHistoryDirs() const
+    {
+        return historyDirs;
+    }
+
+    void setCurrentDir(const QString &_dir);
+
 private:
     inline static MainWindow *instance=nullptr;
 
@@ -41,8 +50,6 @@ private:
     void saveOpenDirHistory();
 
     void playSwitchAnimation(QWidget *page, bool direction);
-
-    void setCurrentDir(const QString &_dir);
 
     void closeEvent(QCloseEvent *ev) override;
 };

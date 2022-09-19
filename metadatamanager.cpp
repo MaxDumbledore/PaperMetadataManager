@@ -29,6 +29,12 @@ void MetaDataManager::reload()
     insertRecordIfNotExist("code_link","TEXT");
     insertRecordIfNotExist("abstract","TEXT");
     insertRecordIfNotExist("chinese_abstract","TEXT");
+    insertRecordIfNotExist("note_link","TEXT");
+    insertRecordIfNotExist("concept_node_ids","TEXT");
+}
+
+void MetaDataManager::saveAndQuit()
+{
 }
 
 void MetaDataManager::insertRecordIfNotExist(const QString &recordName, const QString &tp)

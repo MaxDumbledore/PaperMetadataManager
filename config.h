@@ -22,6 +22,8 @@ public:
 
     static void setDataRoot(QString _dataRoot);
 
+    static void saveAndQuit();
+
     static const QString & getDataRoot(){
         return dataRoot;
     }

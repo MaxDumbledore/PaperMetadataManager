@@ -1,6 +1,7 @@
 ﻿#ifndef TABLEFORM_H
 #define TABLEFORM_H
 
+#include <QSqlQueryModel>
 #include <QWidget>
 
 namespace Ui {
@@ -16,6 +17,11 @@ public:
     ~TableForm();
 
     void reload();
+    static QString mapFieldNameToDisplayName(const QString &fieldName);
+
+    void showEvent(QShowEvent *ev) override;
+
+    void replaceModel(QSqlQueryModel *_model);
 
 private:
     Ui::TableForm *ui; 

@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QMap>
 #include <QApplication>
+#include <QStandardItem>
 #include "treenode.h"
-#include "treeinfo.h"
 
 class TreeNodeManager : public QObject
 {
@@ -23,22 +23,21 @@ public:
     bool addNode(TreeNode *treeNode);
     bool removeNode(int nodeId);
 
-    bool addInfo(TreeInfo *treeInfo);
-    bool removeInfo(int infoId);
-
-    QList<int> getRoots();
-
     const QMap<int, TreeNode *> &getNodes() const
     {
         return nodes;
     }
 
     void reload();
+    void saveAndQuit();
+
+    int getRootId();
+
+    QStandardItem * buildModelItemRecursively(int curId);
 
 signals:
 protected:
     QMap<int,TreeNode *> nodes;
-    QMap<int,TreeInfo *> infos;
     inline static TreeNodeManager *instance=nullptr;
 };
 
