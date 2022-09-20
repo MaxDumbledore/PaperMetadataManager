@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QMessageBox>
 #include "cstsqlquerymodel.h"
 #include "tableeditdialog.h"
 
@@ -28,12 +29,21 @@ TableForm::TableForm(QWidget *parent) :
     });
 
     connect(ui->addBtn,&QToolButton::clicked,this,[this](){
-        TableEditDialog dialog({MetaDataManager::getInstance()->getNumOfRows()+1},this);
+        TableEditDialog dialog(MetaData{MetaDataManager::getInstance()->getMaxOfIds()+1},this);
         dialog.setWindowTitle(qApp->applicationName()+" - Table Editor");
         if(dialog.exec()==QDialog::Rejected)
             return ;
         MetaData data=dialog.getCollectedData();
-//        MetaDataManager::getInstance()->addMetaData(data);
+        MetaDataManager::getInstance()->addMetaData(data);
+    });
+
+    connect(ui->removeBtn,&QToolButton::clicked, this, [this](){
+        auto rowList=ui->tableView->selectionModel()->selectedRows(0);
+        if(rowList.isEmpty())
+            return ;
+        if(QMessageBox::warning(this,qApp->applicationName()+" - Deleting",tr("Are you sure to delete %1 papers?").arg(rowList.size()),QMessageBox::Ok|QMessageBox::Cancel)==QMessageBox::Ok)
+            for(auto &i:qAsConst(rowList))
+                MetaDataManager::getInstance()->removeMetaData(i.data().toInt());
     });
 }
 

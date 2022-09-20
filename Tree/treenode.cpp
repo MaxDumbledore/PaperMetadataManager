@@ -1,6 +1,7 @@
 ﻿#include "treenode.h"
 #include <QFile>
 #include <QDebug>
+#include "utils.h"
 
 TreeNode::TreeNode(QString _nodePath, QObject *parent)
     : QObject{parent},
@@ -8,23 +9,6 @@ TreeNode::TreeNode(QString _nodePath, QObject *parent)
       nodeParent(-1),
       nodePath(std::move(_nodePath))
 {
-}
-
-QString listIntToString(const QList<int> &l){
-    QString s;
-    for(int i:qAsConst(l))
-        s+=QString("%1,").arg(i);
-    s.chop(1);
-    return s;
-}
-
-QList<int> stringToListInt(const QString &s){
-    auto c=s.split(',');
-    QList<int> l;
-    for(auto &i:qAsConst(c))
-        if(!i.isEmpty())
-            l.append(i.toInt());
-    return l;
 }
 
 void TreeNode::loadFromFile()

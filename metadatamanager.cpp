@@ -3,6 +3,8 @@
 #include <QDebug>
 #include "config.h"
 #include <QSqlRecord>
+#include <QSqlError>
+#include "utils.h"
 
 MetaDataManager::MetaDataManager(QObject *parent)
     : QObject{parent}
@@ -53,9 +55,27 @@ int MetaDataManager::getNumOfRows()
     return qry.value(0).toInt();
 }
 
+int MetaDataManager::getMaxOfIds()
+{
+    auto qry=dbConn.exec("SELECT MAX(id) FROM papers");
+    if(qry.next())
+        return qry.value(0).toInt();
+    return 0;
+}
+
 void MetaDataManager::addMetaData(const MetaData &data)
 {
-    QString("INSERT INTO papers (id, title, chinese_title, conference, year, document_link, code_link, abstract, chinese_abstract, note_link, concept_node_ids, remarks) VALUES (%1, %2, %3, '', null, '', '', '', '', '', '', '');")
+    qDebug("fw");
+    auto s=QString("INSERT INTO papers (id, title, chinese_title, conference, year, document_link, code_link, abstract, chinese_abstract, note_link, concept_node_ids, remarks) VALUES (%1, '%2', '%3', '%4', %5, '%6', '%7', '%8', '%9', '%10', '%11', '%12')")
+            .arg(data.id).arg(data.title).arg(data.chinese_title).arg(data.conference).arg(data.year==-1?"null":QString("%1").arg(data.year)).arg(data.document_link).arg(data.code_link).arg(data.abstract).arg(data.chinese_abstract).arg(data.note_link).arg(listIntToString(data.concept_node_ids)).arg(data.remarks);
+    qDebug()<<s;
+    auto qry=dbConn.exec(s);
+    qDebug()<<qry.lastError();
+}
+
+void MetaDataManager::removeMetaData(int id)
+{
+    dbConn.exec(QString("DELETE FROM papers WHERE id = %1").arg(id));
 }
 
 

@@ -1,13 +1,15 @@
 ﻿#include "tableeditdialog.h"
 #include "ui_tableeditdialog.h"
 #include "tree.h"
+#include <QDebug>
 
 TableEditDialog::TableEditDialog(const MetaData &oriData, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TableEditDialog)
 {
+//    qDebug()<<oriData.year;
     ui->setupUi(this);
-    ui->labelId->setText(QString("%1").arg(oriData.id));
+    ui->idLineEdit->setText(QString("%1").arg(oriData.id));
     connect(ui->conceptRadioCard,&QRadioButton::toggled,this,[this](bool checked){
         if(!checked)
             return ;
@@ -55,10 +57,11 @@ MetaData TableEditDialog::getCollectedData()
     data.abstract=ui->abstractTextEdit->toPlainText();
     data.chinese_abstract=ui->cnAbstractTextEdit->toPlainText();
     data.chinese_title=ui->cnTitleLineEdit->text();
+    data.code_link=ui->codeLineEdit->text();
     data.concept_node_ids=resolveConceptsFromString(ui->conceptLineEdit->text());
     data.conference=ui->confLineEdit->text();
     data.document_link=ui->docLineEdit->text();
-    data.id=ui->labelId->text().toInt();
+    data.id=ui->idLineEdit->text().toInt();
     data.note_link=ui->noteLineEdit->text();
     data.remarks=ui->remarkLineEdit->text();
     data.title=ui->titleLineEdit->text();

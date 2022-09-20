@@ -19,7 +19,8 @@ SOURCES += \
     metadatamanager.cpp \
     tableeditdialog.cpp \
     tableform.cpp \
-    treeform.cpp
+    treeform.cpp \
+    utils.cpp
 
 HEADERS += \
     $$files(Tree/*.h) \
@@ -32,7 +33,8 @@ HEADERS += \
     tableeditdialog.h \
     tableform.h \
     tree.h \
-    treeform.h
+    treeform.h \
+    utils.h
 
 FORMS += \
     mainwindow.ui \

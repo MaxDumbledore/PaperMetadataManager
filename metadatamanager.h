@@ -6,12 +6,13 @@
 #include <QSqlDatabase>
 
 struct MetaData{
-    int id;
+    int id=-1;
     QString title;
     QString chinese_title;
     QString conference;
-    int year;
+    int year=-1;
     QString document_link;
+    QString code_link;
     QString abstract;
     QString chinese_abstract;
     QString note_link;
@@ -43,6 +44,10 @@ public:
     }
 
     int getNumOfRows();
+    int getMaxOfIds();
+
+    void addMetaData(const MetaData &data);
+    void removeMetaData(int id);
 
 signals:
 protected:
