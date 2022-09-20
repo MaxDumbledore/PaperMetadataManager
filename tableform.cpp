@@ -31,10 +31,15 @@ TableForm::TableForm(QWidget *parent) :
     connect(ui->addBtn,&QToolButton::clicked,this,[this](){
         TableEditDialog dialog(MetaData{MetaDataManager::getInstance()->getMaxOfIds()+1},this);
         dialog.setWindowTitle(qApp->applicationName()+" - Table Editor");
-        if(dialog.exec()==QDialog::Rejected)
-            return ;
-        MetaData data=dialog.getCollectedData();
-        MetaDataManager::getInstance()->addMetaData(data);
+        while(dialog.exec()==QDialog::Accepted)
+        {
+            MetaData data=dialog.getCollectedData();
+            if(MetaDataManager::getInstance()->addMetaData(data))
+            {
+                qobject_cast<CstSqlQueryModel *>(ui->tableView->model())->setQueryInDefault("SELECT * from papers ORDER BY id");
+                break;
+            }
+        }
     });
 
     connect(ui->removeBtn,&QToolButton::clicked, this, [this](){
@@ -42,8 +47,24 @@ TableForm::TableForm(QWidget *parent) :
         if(rowList.isEmpty())
             return ;
         if(QMessageBox::warning(this,qApp->applicationName()+" - Deleting",tr("Are you sure to delete %1 papers?").arg(rowList.size()),QMessageBox::Ok|QMessageBox::Cancel)==QMessageBox::Ok)
+        {
             for(auto &i:qAsConst(rowList))
                 MetaDataManager::getInstance()->removeMetaData(i.data().toInt());
+            qobject_cast<CstSqlQueryModel *>(ui->tableView->model())->setQueryInDefault("SELECT * from papers ORDER BY id");
+        }
+    });
+
+    connect(ui->editBtn,&QToolButton::clicked,this,[this](){
+        auto rowList=ui->tableView->selectionModel()->selectedRows(0);
+        if(rowList.isEmpty()||rowList.size()>1)
+            return ;
+        int rowId=rowList.at(0).data().toInt();
+        TableEditDialog dialog(MetaDataManager::getInstance()->queryRowAtId(rowId),this);
+        if(dialog.exec()==QDialog::Rejected)
+            return ;
+        auto data=dialog.getCollectedData();
+        MetaDataManager::getInstance()->modifyMetaData(data);
+        qobject_cast<CstSqlQueryModel *>(ui->tableView->model())->setQueryInDefault("SELECT * from papers ORDER BY id");
     });
 }
 
@@ -59,8 +80,7 @@ void TableForm::reload()
     QStringList fieldNames;
     for(int i=0;i<records.count();i++)
         fieldNames+=records.fieldName(i);
-    auto qryModel=new CstSqlQueryModel(ui->tableView);
-    qryModel->setQuery("SELECT * from papers ORDER BY id",conn);
+    auto qryModel=new CstSqlQueryModel("SELECT * from papers ORDER BY id" , ui->tableView);
     int conceptsPos=0;
     for(int i=0;i<fieldNames.size();i++){
         auto title=mapFieldNameToDisplayName(fieldNames.at(i));

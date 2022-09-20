@@ -3,13 +3,12 @@
 #include "tree.h"
 #include <QDebug>
 
-TableEditDialog::TableEditDialog(const MetaData &oriData, QWidget *parent) :
+TableEditDialog::TableEditDialog(const MetaData &data, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TableEditDialog)
 {
 //    qDebug()<<oriData.year;
     ui->setupUi(this);
-    ui->idLineEdit->setText(QString("%1").arg(oriData.id));
     connect(ui->conceptRadioCard,&QRadioButton::toggled,this,[this](bool checked){
         if(!checked)
             return ;
@@ -25,6 +24,19 @@ TableEditDialog::TableEditDialog(const MetaData &oriData, QWidget *parent) :
         ui->conceptRadioCard->setChecked(false);
     });
     ui->conceptRadioManual->setChecked(true);
+
+    ui->abstractTextEdit->setText(data.abstract);
+    ui->cnAbstractTextEdit->setText(data.chinese_abstract);
+    ui->cnTitleLineEdit->setText(data.chinese_title);
+    ui->codeLineEdit->setText(data.code_link);
+    ui->conceptLineEdit->setText(resolveStringFromConcepts(data.concept_node_ids));
+    ui->confLineEdit->setText(data.conference);
+    ui->docLineEdit->setText(data.document_link);
+    ui->idLineEdit->setText(QString("%1").arg(data.id));
+    ui->noteLineEdit->setText(data.note_link);
+    ui->remarkLineEdit->setText(data.remarks);
+    ui->titleLineEdit->setText(data.title);
+    ui->yearLineEdit->setText(QString("%1").arg(data.year));
 }
 
 TableEditDialog::~TableEditDialog()
@@ -43,12 +55,27 @@ QList<int> TableEditDialog::resolveConceptsFromString(QString s)
         {
             int pos=sl.at(i).indexOf('(');
             nodeId=sl.at(i).midRef(pos+1,sl.at(i).size()-pos-2).toInt();
+            if(nodeId!=-1)
+                result.append(nodeId);
+            continue;
         }
-        if(nodeId!=-1)
-            result.append(nodeId);
+        if(s.isEmpty())
+            continue;
+//        qDebug(/)<<s;
         result.append(TreeNodeManager::getInstance()->findFirstContainedByNodeName(TreeNodeManager::getInstance()->getRootId(),s));
     }
     return result;
+}
+
+QString TableEditDialog::resolveStringFromConcepts(const QList<int> &l)
+{
+    QStringList s;
+    for(auto i:qAsConst(l))
+    {
+        auto name=TreeNodeManager::getInstance()->getNodes()[i]->getName();
+        s+=name+QString("(%1)").arg(i);
+    }
+    return s.join(',');
 }
 
 MetaData TableEditDialog::getCollectedData()
@@ -65,6 +92,6 @@ MetaData TableEditDialog::getCollectedData()
     data.note_link=ui->noteLineEdit->text();
     data.remarks=ui->remarkLineEdit->text();
     data.title=ui->titleLineEdit->text();
-    data.year=ui->confLineEdit->text().toInt();
+    data.year=ui->yearLineEdit->text().toInt();
     return data;
 }

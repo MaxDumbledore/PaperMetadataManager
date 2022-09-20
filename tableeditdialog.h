@@ -13,10 +13,11 @@ class TableEditDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit TableEditDialog(const MetaData &oriData,QWidget *parent = nullptr);
+    explicit TableEditDialog(const MetaData &data,QWidget *parent = nullptr);
     ~TableEditDialog();
 
     static QList<int> resolveConceptsFromString(QString s);
+    static QString resolveStringFromConcepts(const QList<int> &l);
 
     MetaData getCollectedData();
 

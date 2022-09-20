@@ -46,8 +46,11 @@ public:
     int getNumOfRows();
     int getMaxOfIds();
 
-    void addMetaData(const MetaData &data);
+    bool addMetaData(const MetaData &data);
     void removeMetaData(int id);
+
+    MetaData queryRowAtId(int id);
+    bool modifyMetaData(const MetaData &data);
 
 signals:
 protected:

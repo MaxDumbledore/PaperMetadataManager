@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>407</width>
-    <height>605</height>
+    <height>612</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -117,7 +117,11 @@
     </widget>
    </item>
    <item row="2" column="1" colspan="3">
-    <widget class="QLineEdit" name="cnTitleLineEdit"/>
+    <widget class="QLineEdit" name="cnTitleLineEdit">
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
    </item>
    <item row="13" column="0" colspan="4">
     <widget class="Line" name="line">
@@ -134,7 +138,11 @@
     </widget>
    </item>
    <item row="1" column="1" colspan="3">
-    <widget class="QLineEdit" name="titleLineEdit"/>
+    <widget class="QLineEdit" name="titleLineEdit">
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
    </item>
    <item row="12" column="1" colspan="3">
     <widget class="QLineEdit" name="noteLineEdit"/>

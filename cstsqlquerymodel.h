@@ -8,7 +8,8 @@ class CstSqlQueryModel : public QSqlQueryModel
 {
     Q_OBJECT
 public:
-    explicit CstSqlQueryModel(QObject *parent = nullptr);
+    explicit CstSqlQueryModel(const QString &sqlQuery,QObject *parent = nullptr);
+    void setQueryInDefault(const QString &qry);
 
 signals:
 protected:
