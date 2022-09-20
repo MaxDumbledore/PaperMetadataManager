@@ -49,3 +49,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     README.md
+
+win32{
+    QMAKE_CXXFLAGS+=/utf-8
+}
+

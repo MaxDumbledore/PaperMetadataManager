@@ -115,7 +115,6 @@ bool MetaDataManager::modifyMetaData(const MetaData &data)
     qry.bindValue(":abstract",data.abstract);
     qry.bindValue(":chinese_abstract",data.chinese_abstract);
     qry.bindValue(":note_link",data.note_link);
-
     qry.bindValue(":concept_node_ids",listIntToString(data.concept_node_ids));
     qry.bindValue(":remarks",data.remarks);
     qry.bindValue(":id",data.id);

@@ -7,8 +7,10 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QMessageBox>
+#include <QProcess>
 #include "cstsqlquerymodel.h"
 #include "tableeditdialog.h"
+#include "config.h"
 
 TableForm::TableForm(QWidget *parent) :
     QWidget(parent),
@@ -23,19 +25,47 @@ TableForm::TableForm(QWidget *parent) :
 
     connect(ui->tableView,&QTableView::doubleClicked,this,[this](const QModelIndex &index){
         auto columnTitle=ui->tableView->model()->headerData(index.column(),Qt::Horizontal).toString();
-        if(columnTitle.right(4)=="Link"){
+        if(columnTitle=="Note Link")
+        {
+            QDesktopServices::openUrl(QUrl::fromLocalFile(index.data().toString().toUtf8()));
+        }
+        else if(columnTitle.right(4)=="Link"){
             QDesktopServices::openUrl(QUrl::fromEncoded(index.data().toString().toUtf8()));
         }
     });
 
     connect(ui->addBtn,&QToolButton::clicked,this,[this](){
-        TableEditDialog dialog(MetaData{MetaDataManager::getInstance()->getMaxOfIds()+1},this);
+        MetaData data;
+        data.id=MetaDataManager::getInstance()->getMaxOfIds()+1;
+        TableEditDialog dialog(data,this);
         dialog.setWindowTitle(qApp->applicationName()+" - Table Editor");
         while(dialog.exec()==QDialog::Accepted)
         {
-            MetaData data=dialog.getCollectedData();
+            data=dialog.getCollectedData();
+
+            auto fileName=data.title;
+            fileName.replace('\\',' ');
+            fileName.replace('/',' ');
+            fileName.replace('<',' ');
+            fileName.replace('>',' ');
+            fileName.replace('?',' ');
+            fileName.replace(':',' ');
+            fileName.replace('|',' ');
+            fileName.replace('*',' ');
+            fileName.replace('\"',' ');
+            auto notePath=Config::getNotePath()+fileName+".md";
+            data.note_link=notePath;
             if(MetaDataManager::getInstance()->addMetaData(data))
             {
+                //make note
+
+
+                QFile file(notePath);
+                file.open(QFile::WriteOnly);
+                file.write(("# "+data.title+"\n").toUtf8());
+                file.write(QString("## 摘要\n").toUtf8());
+                file.write(data.chinese_abstract.toUtf8());
+                file.close();
                 qobject_cast<CstSqlQueryModel *>(ui->tableView->model())->setQueryInDefault("SELECT * from papers ORDER BY id");
                 break;
             }
