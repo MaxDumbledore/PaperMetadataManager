@@ -7,7 +7,7 @@ TableEditDialog::TableEditDialog(const MetaData &data, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TableEditDialog)
 {
-//    qDebug()<<oriData.year;
+    //    qDebug()<<oriData.year;
     ui->setupUi(this);
     connect(ui->conceptRadioCard,&QRadioButton::toggled,this,[this](bool checked){
         if(!checked)
@@ -23,6 +23,20 @@ TableEditDialog::TableEditDialog(const MetaData &data, QWidget *parent) :
         ui->conceptCardBox->setEnabled(false);
         ui->conceptRadioCard->setChecked(false);
     });
+    connect(ui->filterBtn,&QPushButton::clicked, this, [this](){
+        auto text=ui->abstractTextEdit->toPlainText();
+        text.replace('\n',' ');
+        text.remove('\r');
+        text.remove((char)2);
+        ui->abstractTextEdit->setText(text);
+    });
+
+    connect(ui->titleLineEdit,&QLineEdit::editingFinished,this,[this](){
+        auto text=ui->titleLineEdit->text();
+        text.remove((char)2);
+        ui->titleLineEdit->setText(text);
+    });
+
     ui->conceptRadioManual->setChecked(true);
 
     ui->abstractTextEdit->setText(data.abstract);
@@ -36,7 +50,8 @@ TableEditDialog::TableEditDialog(const MetaData &data, QWidget *parent) :
     ui->noteLineEdit->setText(data.note_link);
     ui->remarkLineEdit->setText(data.remarks);
     ui->titleLineEdit->setText(data.title);
-    ui->yearLineEdit->setText(QString("%1").arg(data.year));
+    if(data.year!=-1)
+        ui->yearLineEdit->setText(QString("%1").arg(data.year));
 }
 
 TableEditDialog::~TableEditDialog()
@@ -61,7 +76,7 @@ QList<int> TableEditDialog::resolveConceptsFromString(QString s)
         }
         if(s.isEmpty())
             continue;
-//        qDebug(/)<<s;
+        //        qDebug(/)<<s;
         result.append(TreeNodeManager::getInstance()->findFirstContainedByNodeName(TreeNodeManager::getInstance()->getRootId(),s));
     }
     return result;
@@ -92,6 +107,7 @@ MetaData TableEditDialog::getCollectedData()
     data.note_link=ui->noteLineEdit->text();
     data.remarks=ui->remarkLineEdit->text();
     data.title=ui->titleLineEdit->text();
-    data.year=ui->yearLineEdit->text().toInt();
+    if(!ui->yearLineEdit->text().isEmpty())
+        data.year=ui->yearLineEdit->text().toInt();
     return data;
 }

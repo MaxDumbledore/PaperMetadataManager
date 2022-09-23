@@ -8,6 +8,7 @@
 #include <QUrl>
 #include <QMessageBox>
 #include <QProcess>
+#include <QSortFilterProxyModel>
 #include "cstsqlquerymodel.h"
 #include "tableeditdialog.h"
 #include "config.h"
@@ -22,6 +23,11 @@ TableForm::TableForm(QWidget *parent) :
     ui->tableView->horizontalHeader()->setMaximumSectionSize(500);
     ui->tableView->verticalHeader()->setDefaultSectionSize(20);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView->setSortingEnabled(true);
+    connect(ui->tableView->horizontalHeader(),&QHeaderView::sortIndicatorChanged,this,[this](int logicalIndex, Qt::SortOrder order){
+        if(logicalIndex==0)
+        ui->tableView->horizontalHeader()->setSortIndicator(logicalIndex,order);
+    });
 
     connect(ui->tableView,&QTableView::doubleClicked,this,[this](const QModelIndex &index){
         auto columnTitle=ui->tableView->model()->headerData(index.column(),Qt::Horizontal).toString();
@@ -63,6 +69,7 @@ TableForm::TableForm(QWidget *parent) :
                 QFile file(notePath);
                 file.open(QFile::WriteOnly);
                 file.write(("# "+data.title+"\n").toUtf8());
+                file.write(data.chinese_title.toUtf8()+"\n");
                 file.write(QString("## 摘要\n").toUtf8());
                 file.write(data.chinese_abstract.toUtf8());
                 file.close();
@@ -148,8 +155,11 @@ void TableForm::replaceModel(QSqlQueryModel *_model)
 {
     auto oriModel=ui->tableView->model();
     auto oriSelectionModel=ui->tableView->selectionModel();
-    ui->tableView->setModel(_model);
-    ui->tableView->setSelectionModel(new QItemSelectionModel(_model));
+    auto model=new QSortFilterProxyModel();
+    model->setSourceModel(_model);
+    _model->setParent(model);
+    ui->tableView->setModel(model);
+    ui->tableView->setSelectionModel(new QItemSelectionModel(model));
     if(oriModel!=nullptr){
         oriModel->deleteLater();
         oriSelectionModel->deleteLater();

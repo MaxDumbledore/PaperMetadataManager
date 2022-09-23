@@ -7,105 +7,20 @@
     <x>0</x>
     <y>0</y>
     <width>407</width>
-    <height>612</height>
+    <height>620</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="10" column="0" colspan="4">
-    <widget class="QTextEdit" name="cnAbstractTextEdit">
-     <property name="acceptRichText">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="20" column="1" colspan="3">
-    <widget class="QLineEdit" name="remarkLineEdit"/>
-   </item>
-   <item row="21" column="0" colspan="4">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0" colspan="4">
-    <widget class="QTextEdit" name="abstractTextEdit">
-     <property name="acceptRichText">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1" colspan="3">
-    <widget class="QLineEdit" name="codeLineEdit"/>
-   </item>
-   <item row="3" column="3">
-    <widget class="QLineEdit" name="yearLineEdit"/>
-   </item>
-   <item row="18" column="0" colspan="4">
+   <item row="18" column="0" colspan="5">
     <widget class="QLineEdit" name="conceptLineEdit"/>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>ID: </string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_7">
-     <property name="text">
-      <string>Code Link: </string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0" colspan="2">
-    <widget class="QLabel" name="label_9">
-     <property name="text">
-      <string>Chinese Abstract: </string>
-     </property>
-    </widget>
    </item>
    <item row="3" column="2">
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>Year: </string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Chinese Title: </string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1" colspan="3">
-    <widget class="QLineEdit" name="docLineEdit"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>Conference: </string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Title: </string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>Document Link: </string>
      </property>
     </widget>
    </item>
@@ -116,38 +31,93 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="3">
-    <widget class="QLineEdit" name="cnTitleLineEdit">
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+   <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>Abstract: </string>
      </property>
     </widget>
    </item>
-   <item row="13" column="0" colspan="4">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
+   <item row="20" column="1" colspan="4">
+    <widget class="QLineEdit" name="remarkLineEdit"/>
    </item>
-   <item row="16" column="0" colspan="4">
+   <item row="16" column="0" colspan="5">
     <widget class="QGroupBox" name="conceptCardBox">
      <property name="title">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" colspan="3">
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Document Link: </string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Title: </string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Chinese Title: </string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="4">
+    <widget class="QLineEdit" name="idLineEdit">
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="4">
+    <widget class="QLineEdit" name="yearLineEdit">
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="0" colspan="2">
+    <widget class="QRadioButton" name="conceptRadioCard">
+     <property name="text">
+      <string>Use Question Cards To Edit</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" colspan="4">
+    <widget class="QLineEdit" name="docLineEdit"/>
+   </item>
+   <item row="2" column="1" colspan="4">
+    <widget class="QLineEdit" name="cnTitleLineEdit">
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" colspan="4">
+    <widget class="QLineEdit" name="codeLineEdit"/>
+   </item>
+   <item row="1" column="1" colspan="4">
     <widget class="QLineEdit" name="titleLineEdit">
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
-   <item row="12" column="1" colspan="3">
-    <widget class="QLineEdit" name="noteLineEdit"/>
+   <item row="19" column="0" colspan="5">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </item>
-   <item row="8" column="0" colspan="4">
+   <item row="8" column="0" colspan="5">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -160,6 +130,13 @@
      </property>
     </spacer>
    </item>
+   <item row="13" column="0" colspan="5">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
    <item row="12" column="0">
     <widget class="QLabel" name="label_10">
      <property name="text">
@@ -167,48 +144,95 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>Abstract: </string>
+   <item row="7" column="0" colspan="5">
+    <widget class="QTextEdit" name="abstractTextEdit">
+     <property name="acceptRichText">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
-    <widget class="QLineEdit" name="confLineEdit"/>
-   </item>
-   <item row="19" column="0" colspan="4">
-    <widget class="Line" name="line_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="15" column="2" colspan="2">
+   <item row="15" column="2" colspan="3">
     <widget class="QRadioButton" name="conceptRadioManual">
      <property name="text">
       <string>Manual Edit</string>
      </property>
     </widget>
    </item>
-   <item row="15" column="0" colspan="2">
-    <widget class="QRadioButton" name="conceptRadioCard">
-     <property name="text">
-      <string>Use Question Cards To Edit</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="0" colspan="4">
+   <item row="14" column="0" colspan="5">
     <widget class="QLabel" name="label_12">
      <property name="text">
       <string>Concepts: </string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" colspan="3">
-    <widget class="QLineEdit" name="idLineEdit">
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="confLineEdit">
      <property name="alignment">
       <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>ID: </string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0" colspan="5">
+    <widget class="QTextEdit" name="cnAbstractTextEdit">
+     <property name="acceptRichText">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="21" column="0" colspan="5">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="2">
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Chinese Abstract: </string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Conference: </string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="1" colspan="4">
+    <widget class="QLineEdit" name="noteLineEdit"/>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Code Link: </string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="4">
+    <widget class="QPushButton" name="filterBtn">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::RightToLeft</enum>
+     </property>
+     <property name="text">
+      <string>Filter '\n'</string>
      </property>
     </widget>
    </item>

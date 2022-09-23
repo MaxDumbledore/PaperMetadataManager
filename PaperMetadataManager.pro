@@ -12,6 +12,7 @@ SOURCES += \
     $$files(Tree/*.cpp) \
     config.cpp \
     cstbuttongroup.cpp \
+    cstsortfilterproxymodel.cpp \
     cstsqlquerymodel.cpp \
     globalsettings.cpp \
     main.cpp \
@@ -26,6 +27,7 @@ HEADERS += \
     $$files(Tree/*.h) \
     config.h \
     cstbuttongroup.h \
+    cstsortfilterproxymodel.h \
     cstsqlquerymodel.h \
     globalsettings.h \
     mainwindow.h \
