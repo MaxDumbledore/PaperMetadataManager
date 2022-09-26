@@ -8,7 +8,7 @@
 #include <QUrl>
 #include <QMessageBox>
 #include <QProcess>
-#include <QSortFilterProxyModel>
+#include "cstsortfilterproxymodel.h"
 #include "cstsqlquerymodel.h"
 #include "tableeditdialog.h"
 #include "config.h"
@@ -19,15 +19,12 @@ TableForm::TableForm(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tableView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+//    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->tableView->horizontalHeader()->setMaximumSectionSize(500);
     ui->tableView->verticalHeader()->setDefaultSectionSize(20);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setSortingEnabled(true);
-    connect(ui->tableView->horizontalHeader(),&QHeaderView::sortIndicatorChanged,this,[this](int logicalIndex, Qt::SortOrder order){
-        if(logicalIndex==0)
-        ui->tableView->horizontalHeader()->setSortIndicator(logicalIndex,order);
-    });
+    ui->tableView->horizontalHeader() ->setSortIndicatorShown(false);
 
     connect(ui->tableView,&QTableView::doubleClicked,this,[this](const QModelIndex &index){
         auto columnTitle=ui->tableView->model()->headerData(index.column(),Qt::Horizontal).toString();
@@ -73,7 +70,7 @@ TableForm::TableForm(QWidget *parent) :
                 file.write(QString("## 摘要\n").toUtf8());
                 file.write(data.chinese_abstract.toUtf8());
                 file.close();
-                qobject_cast<CstSqlQueryModel *>(ui->tableView->model())->setQueryInDefault("SELECT * from papers ORDER BY id");
+                model->setQueryInDefault("SELECT * from papers ORDER BY id");
                 break;
             }
         }
@@ -87,7 +84,7 @@ TableForm::TableForm(QWidget *parent) :
         {
             for(auto &i:qAsConst(rowList))
                 MetaDataManager::getInstance()->removeMetaData(i.data().toInt());
-            qobject_cast<CstSqlQueryModel *>(ui->tableView->model())->setQueryInDefault("SELECT * from papers ORDER BY id");
+            model->setQueryInDefault("SELECT * from papers ORDER BY id");
         }
     });
 
@@ -101,7 +98,7 @@ TableForm::TableForm(QWidget *parent) :
             return ;
         auto data=dialog.getCollectedData();
         MetaDataManager::getInstance()->modifyMetaData(data);
-        qobject_cast<CstSqlQueryModel *>(ui->tableView->model())->setQueryInDefault("SELECT * from papers ORDER BY id");
+        model->setQueryInDefault("SELECT * from papers ORDER BY id");
     });
 }
 
@@ -128,7 +125,11 @@ void TableForm::reload()
             conceptsPos=i;
     }
     replaceModel(qryModel);
+
     ui->tableView->horizontalHeader()->moveSection(conceptsPos,5);
+//    ui->tableView->setColumnWidth(0,10);
+//    ui->tableView->setColumnWidth(1,500);
+//    ui->tableView->setColumnWidth(2,300);
 }
 
 QString TableForm::mapFieldNameToDisplayName(const QString &fieldName)
@@ -145,23 +146,20 @@ QString TableForm::mapFieldNameToDisplayName(const QString &fieldName)
     return tr(qPrintable(splitAndToCamelCase(fieldName)));
 }
 
-void TableForm::showEvent(QShowEvent *ev)
+void TableForm::replaceModel(CstSqlQueryModel *_model)
 {
-    QWidget::showEvent(ev);
-    //maybe can make column width changable here
-}
-
-void TableForm::replaceModel(QSqlQueryModel *_model)
-{
-    auto oriModel=ui->tableView->model();
-    auto oriSelectionModel=ui->tableView->selectionModel();
-    auto model=new QSortFilterProxyModel();
-    model->setSourceModel(_model);
-    _model->setParent(model);
-    ui->tableView->setModel(model);
-    ui->tableView->setSelectionModel(new QItemSelectionModel(model));
-    if(oriModel!=nullptr){
-        oriModel->deleteLater();
-        oriSelectionModel->deleteLater();
-    }
+    model=_model;
+    auto oriProxyModel=ui->tableView->model();
+    auto proxyModel=new CstSortFilterProxyModel(ui->tableView);
+    proxyModel->setSourceModel(model);
+    model->setParent(proxyModel);
+    ui->tableView->setModel(proxyModel);
+    ui->tableView->setSelectionModel(new QItemSelectionModel(proxyModel,proxyModel));
+    if(oriProxyModel!=nullptr)
+        oriProxyModel->deleteLater();
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->tableView->columnAt(0);
+    //Very Strange, just call columnAt() then setSectionResizeMode will keep the width of ResizeToContents
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    //I initially want to write setColumnWidth(columnWidth) here, but needn't
 }

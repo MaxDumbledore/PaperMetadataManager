@@ -3,6 +3,7 @@
 
 #include <QSqlQueryModel>
 #include <QWidget>
+#include "cstsqlquerymodel.h"
 
 namespace Ui {
 class TableForm;
@@ -19,12 +20,12 @@ public:
     void reload();
     static QString mapFieldNameToDisplayName(const QString &fieldName);
 
-    void showEvent(QShowEvent *ev) override;
-
-    void replaceModel(QSqlQueryModel *_model);
+    void replaceModel(CstSqlQueryModel *_model);
 
 private:
     Ui::TableForm *ui; 
+
+    CstSqlQueryModel *model;
 };
 
 #endif // TABLEFORM_H
