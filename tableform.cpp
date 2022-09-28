@@ -80,7 +80,7 @@ TableForm::TableForm(QWidget *parent) :
         auto rowList=ui->tableView->selectionModel()->selectedRows(0);
         if(rowList.isEmpty())
             return ;
-        if(QMessageBox::warning(this,qApp->applicationName()+" - Deleting",tr("Are you sure to delete %1 papers?").arg(rowList.size()),QMessageBox::Ok|QMessageBox::Cancel)==QMessageBox::Ok)
+        if(QMessageBox::warning(this,qApp->applicationName()+" - Deleting",QString("Are you sure to delete %1 papers?").arg(rowList.size()),QMessageBox::Ok|QMessageBox::Cancel)==QMessageBox::Ok)
         {
             for(auto &i:qAsConst(rowList))
                 MetaDataManager::getInstance()->removeMetaData(i.data().toInt());
@@ -99,6 +99,15 @@ TableForm::TableForm(QWidget *parent) :
         auto data=dialog.getCollectedData();
         MetaDataManager::getInstance()->modifyMetaData(data);
         model->setQueryInDefault("SELECT * from papers ORDER BY id");
+    });
+
+    connect(ui->filterLineEdit,&QLineEdit::returnPressed,this,[this](){
+        qobject_cast<CstSortFilterProxyModel *>(ui->tableView->model())->setFilterRegExp(ui->filterLineEdit->text());
+    });
+
+    connect(ui->resetBtn,&QToolButton::clicked,this,[this](){
+        ui->filterLineEdit->clear();
+        emit ui->filterLineEdit->returnPressed();
     });
 }
 
@@ -135,7 +144,7 @@ void TableForm::reload()
 QString TableForm::mapFieldNameToDisplayName(const QString &fieldName)
 {
     if(fieldName=="concept_node_ids")
-        return tr("Concepts");
+        return "Concepts";
     auto splitAndToCamelCase=[](const QString &s)
     {
         QStringList parts = s.split('_', Qt::SkipEmptyParts);
@@ -143,7 +152,7 @@ QString TableForm::mapFieldNameToDisplayName(const QString &fieldName)
             parts[i].replace(0, 1, parts[i][0].toUpper());
         return parts.join(" ");
     };
-    return tr(qPrintable(splitAndToCamelCase(fieldName)));
+    return splitAndToCamelCase(fieldName);
 }
 
 void TableForm::replaceModel(CstSqlQueryModel *_model)

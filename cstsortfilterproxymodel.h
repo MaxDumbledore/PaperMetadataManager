@@ -14,6 +14,8 @@ public:
 signals:
 protected:
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
+
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     int prevSort;
 };
 

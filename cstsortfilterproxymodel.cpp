@@ -25,3 +25,15 @@ void CstSortFilterProxyModel::sort(int column, Qt::SortOrder order)
     prevSort=column;
     QSortFilterProxyModel::sort(column,order);
 }
+
+bool CstSortFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    int n=sourceModel()->columnCount();
+    for(int i=0;i<n;i++)
+    {
+        auto data=sourceModel()->index(source_row,i,source_parent).data(Qt::DisplayRole).toString();
+        if(data.contains(filterRegExp()))
+            return true;
+    }
+    return false;
+}

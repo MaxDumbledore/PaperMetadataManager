@@ -13,7 +13,7 @@ CstSqlQueryModel::CstSqlQueryModel(const QString &sqlQuery, QObject *parent)
 QVariant CstSqlQueryModel::data(const QModelIndex &item, int role) const
 {
     auto temp=QSqlQueryModel::data(item,role);
-    if(headerData(item.column(),Qt::Horizontal).toString()==tr("Concepts")&&role == Qt::DisplayRole)
+    if(headerData(item.column(),Qt::Horizontal).toString()=="Concepts"&&role == Qt::DisplayRole)
     {
         auto l=stringToListInt(temp.toString());
         QStringList result;
