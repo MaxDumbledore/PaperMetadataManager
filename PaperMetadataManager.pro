@@ -15,6 +15,7 @@ SOURCES += \
     cstsortfilterproxymodel.cpp \
     cstsqlquerymodel.cpp \
     globalsettings.cpp \
+    kvquerysetterform.cpp \
     main.cpp \
     mainwindow.cpp \
     metadatamanager.cpp \
@@ -30,6 +31,7 @@ HEADERS += \
     cstsortfilterproxymodel.h \
     cstsqlquerymodel.h \
     globalsettings.h \
+    kvquerysetterform.h \
     mainwindow.h \
     metadatamanager.h \
     tableeditdialog.h \
@@ -39,6 +41,7 @@ HEADERS += \
     utils.h
 
 FORMS += \
+    kvquerysetterform.ui \
     mainwindow.ui \
     tableeditdialog.ui \
     tableform.ui \

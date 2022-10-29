@@ -44,7 +44,7 @@ TableEditDialog::TableEditDialog(const MetaData &data, QWidget *parent) :
     ui->cnTitleLineEdit->setText(data.chinese_title);
     ui->codeLineEdit->setText(data.code_link);
     ui->conceptLineEdit->setText(resolveStringFromConcepts(data.concept_node_ids));
-    ui->confLineEdit->setText(data.conference);
+    ui->publicationLineEdit->setText(data.publication);
     ui->docLineEdit->setText(data.document_link);
     ui->idLineEdit->setText(QString("%1").arg(data.id));
     ui->noteLineEdit->setText(data.note_link);
@@ -101,7 +101,7 @@ MetaData TableEditDialog::getCollectedData()
     data.chinese_title=ui->cnTitleLineEdit->text();
     data.code_link=ui->codeLineEdit->text();
     data.concept_node_ids=resolveConceptsFromString(ui->conceptLineEdit->text());
-    data.conference=ui->confLineEdit->text();
+    data.publication=ui->publicationLineEdit->text();
     data.document_link=ui->docLineEdit->text();
     data.id=ui->idLineEdit->text().toInt();
     data.note_link=ui->noteLineEdit->text();

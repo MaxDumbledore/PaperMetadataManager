@@ -4,7 +4,8 @@
 #include <QHeaderView>
 
 CstSortFilterProxyModel::CstSortFilterProxyModel(QTableView *parent)
-    : QSortFilterProxyModel{parent}
+    : QSortFilterProxyModel{parent},
+      filterMode(FilterMode::SUB_STRING)
 {
 
 }
@@ -29,11 +30,48 @@ void CstSortFilterProxyModel::sort(int column, Qt::SortOrder order)
 bool CstSortFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     int n=sourceModel()->columnCount();
-    for(int i=0;i<n;i++)
+    if(filterMode==FilterMode::SUB_STRING)
     {
-        auto data=sourceModel()->index(source_row,i,source_parent).data(Qt::DisplayRole).toString();
-        if(data.contains(filterRegExp()))
-            return true;
+        for(int i=0;i<n;i++)
+        {
+            auto data=sourceModel()->index(source_row,i,source_parent).data(Qt::DisplayRole).toString();
+            if(data.contains(filterRegExp()))
+                return true;
+        }
+        return false;
     }
-    return false;
+    else
+    {
+        for(int i=0;i<n;i++)
+        {
+            auto t=sourceModel()->headerData(i,Qt::Horizontal).toString();
+            if(!keyValues.contains(t))
+                continue;
+            auto data=sourceModel()->index(source_row,i,source_parent).data(Qt::DisplayRole).toString();
+            if(keyValues.value(t).first=="contains")
+            {
+                if(!data.contains(keyValues.value(t).second))
+                    return false;
+            }
+            else if(keyValues.value(t).first=="equals")
+            {
+                if(data!=keyValues.value(t).second)
+                    return false;
+            }
+        }
+        return true;
+    }
+}
+
+void CstSortFilterProxyModel::setFilterMode(FilterMode newFilterMode)
+{
+    filterMode = newFilterMode;
+}
+
+void CstSortFilterProxyModel::setKeyValues(const QList<QStringList> &newKeyValues)
+{
+    keyValues.clear();
+    for(auto &i:qAsConst(newKeyValues))
+        keyValues.insert(i.first(),{i.at(1),i.at(2)});
+    setFilterRegExp("temp");
 }

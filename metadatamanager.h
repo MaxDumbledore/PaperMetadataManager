@@ -9,7 +9,7 @@ struct MetaData{
     int id=-1;
     QString title;
     QString chinese_title;
-    QString conference;
+    QString publication;
     int year=-1;
     QString document_link;
     QString code_link;

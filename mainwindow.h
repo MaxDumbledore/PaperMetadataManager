@@ -49,6 +49,8 @@ private:
     void loadOpenDirHistory();
     void saveOpenDirHistory();
 
+    void addConnectionForActionDir(QAction *action);
+
     void playSwitchAnimation(QWidget *page, bool direction);
 
     void closeEvent(QCloseEvent *ev) override;

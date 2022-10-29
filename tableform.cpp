@@ -12,14 +12,35 @@
 #include "cstsqlquerymodel.h"
 #include "tableeditdialog.h"
 #include "config.h"
+#include <QButtonGroup>
 
 TableForm::TableForm(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TableForm)
 {
     ui->setupUi(this);
+
+    auto bg=QButtonGroup(this);
+    bg.addButton(ui->kvQueryRadioBtn);
+    bg.addButton(ui->ssQueryRadioBtn);
+
+    connect(ui->ssQueryRadioBtn,&QRadioButton::toggled,this,[this](){
+        ui->kvQuerySetterForm->hide();
+        ui->filterLineEdit->show();
+    });
+
+    connect(ui->kvQueryRadioBtn,&QRadioButton::toggled,this,[this](){
+        ui->filterLineEdit->hide();
+        ui->kvQuerySetterForm->show();
+    });
+
+    ui->ssQueryRadioBtn->setChecked(true);
+    ui->kvQuerySetterForm->hide();
+
     ui->tableView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-//    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    //    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    //    ui->tableView->horizontalHeader()->moveSection(conceptsPos,5);
+
     ui->tableView->horizontalHeader()->setMaximumSectionSize(500);
     ui->tableView->verticalHeader()->setDefaultSectionSize(20);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -32,7 +53,8 @@ TableForm::TableForm(QWidget *parent) :
         {
             QDesktopServices::openUrl(QUrl::fromLocalFile(index.data().toString().toUtf8()));
         }
-        else if(columnTitle.right(4)=="Link"){
+        else if(columnTitle.right(4)=="Link")
+        {
             QDesktopServices::openUrl(QUrl::fromEncoded(index.data().toString().toUtf8()));
         }
     });
@@ -56,20 +78,34 @@ TableForm::TableForm(QWidget *parent) :
             fileName.replace('|',' ');
             fileName.replace('*',' ');
             fileName.replace('\"',' ');
-            auto notePath=Config::getNotePath()+fileName+".md";
-            data.note_link=notePath;
+            bool newFile=false;
+            if(data.note_link.isEmpty())
+            {
+                auto notePath=Config::getNotePath()+fileName+".md";
+                data.note_link=notePath;
+                newFile=true;
+            }
             if(MetaDataManager::getInstance()->addMetaData(data))
             {
                 //make note
+//                qDebug()<<data.note_link;
+                if(newFile)
+                {
+//                    qDebug()<<data.note_link;
 
-
-                QFile file(notePath);
-                file.open(QFile::WriteOnly);
-                file.write(("# "+data.title+"\n").toUtf8());
-                file.write(data.chinese_title.toUtf8()+"\n");
-                file.write(QString("## 摘要\n").toUtf8());
-                file.write(data.chinese_abstract.toUtf8());
-                file.close();
+                    auto notePath=Config::getNotePath()+fileName+".md";
+                    data.note_link=notePath;
+                    QFile file(notePath);
+                    if(!file.exists())
+                    {
+                        file.open(QFile::WriteOnly);
+                        file.write(("# "+data.title+"\n").toUtf8());
+                        file.write(data.chinese_title.toUtf8()+"\n");
+                        file.write(QString("## 摘要\n").toUtf8());
+                        file.write(data.chinese_abstract.toUtf8());
+                        file.close();
+                    }
+                }
                 model->setQueryInDefault("SELECT * from papers ORDER BY id");
                 break;
             }
@@ -102,12 +138,20 @@ TableForm::TableForm(QWidget *parent) :
     });
 
     connect(ui->filterLineEdit,&QLineEdit::returnPressed,this,[this](){
-        qobject_cast<CstSortFilterProxyModel *>(ui->tableView->model())->setFilterRegExp(ui->filterLineEdit->text());
+        auto model=qobject_cast<CstSortFilterProxyModel *>(ui->tableView->model());
+        model->setFilterMode(CstSortFilterProxyModel::SUB_STRING);
+        model->setFilterRegExp(ui->filterLineEdit->text());
+    });
+
+    connect(ui->kvQuerySetterForm,&KVQuerySetterForm::queryUpdated,this,[this](const QList<QStringList> &data){
+        auto model=qobject_cast<CstSortFilterProxyModel *>(ui->tableView->model());
+        model->setFilterMode(CstSortFilterProxyModel::KEY_VALUE);
+        model->setKeyValues(data);
     });
 
     connect(ui->resetBtn,&QToolButton::clicked,this,[this](){
         ui->filterLineEdit->clear();
-        emit ui->filterLineEdit->returnPressed();
+        ui->kvQuerySetterForm->clear();
     });
 }
 
@@ -124,21 +168,20 @@ void TableForm::reload()
     for(int i=0;i<records.count();i++)
         fieldNames+=records.fieldName(i);
     auto qryModel=new CstSqlQueryModel("SELECT * from papers ORDER BY id" , ui->tableView);
-    int conceptsPos=0;
+    QStringList displayNames;
     for(int i=0;i<fieldNames.size();i++){
         auto title=mapFieldNameToDisplayName(fieldNames.at(i));
+        displayNames.append(title);
         qryModel->setHeaderData(i,Qt::Horizontal,title);
         if(title.right(4)=="Link")
             qryModel->setHeaderData(i,Qt::Horizontal,QColor(Qt::darkBlue),Qt::ForegroundRole);
-        if(title=="Concepts")
-            conceptsPos=i;
     }
     replaceModel(qryModel);
 
-    ui->tableView->horizontalHeader()->moveSection(conceptsPos,5);
-//    ui->tableView->setColumnWidth(0,10);
-//    ui->tableView->setColumnWidth(1,500);
-//    ui->tableView->setColumnWidth(2,300);
+    ui->kvQuerySetterForm->setKeys(displayNames);
+    //    ui->tableView->setColumnWidth(0,10);
+    //    ui->tableView->setColumnWidth(1,500);
+    //    ui->tableView->setColumnWidth(2,300);
 }
 
 QString TableForm::mapFieldNameToDisplayName(const QString &fieldName)

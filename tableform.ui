@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>426</width>
-    <height>292</height>
+    <height>302</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -29,33 +29,6 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="1" column="2">
-    <widget class="QToolButton" name="editBtn">
-     <property name="text">
-      <string>🖋️</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="4">
-    <widget class="QToolButton" name="removeBtn">
-     <property name="text">
-      <string>➖</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="1" column="1">
     <spacer name="horizontalSpacer">
      <property name="orientation">
@@ -76,6 +49,40 @@
      </property>
     </widget>
    </item>
+   <item row="1" column="3">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="4">
+    <widget class="QToolButton" name="removeBtn">
+     <property name="text">
+      <string>➖</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QToolButton" name="editBtn">
+     <property name="text">
+      <string>🖋️</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QRadioButton" name="ssQueryRadioBtn">
+     <property name="text">
+      <string>Sub-string</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0" colspan="5">
     <widget class="QTableView" name="tableView"/>
    </item>
@@ -83,18 +90,46 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QToolButton" name="resetBtn">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>🔁</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="filterLineEdit"/>
+      <widget class="QLineEdit" name="filterLineEdit">
+       <property name="placeholderText">
+        <string>Enter To Query</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KVQuerySetterForm" name="kvQuerySetterForm" native="true"/>
      </item>
     </layout>
    </item>
+   <item row="3" column="3">
+    <widget class="QRadioButton" name="kvQueryRadioBtn">
+     <property name="text">
+      <string>Key-value</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KVQuerySetterForm</class>
+   <extends>QWidget</extends>
+   <header>kvquerysetterform.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

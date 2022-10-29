@@ -42,7 +42,10 @@ MainWindow::MainWindow(QWidget *parent)
                 menu->removeAction(action);
             }
             else
+            {
                 action=new QAction(dirName);
+                addConnectionForActionDir(action);
+            }
 
             historyDirs.push_front(dirName);
             menu->insertAction(menu->actions().isEmpty()?nullptr:menu->actions().at(0),action);
@@ -90,14 +93,7 @@ void MainWindow::loadOpenDirHistory()
     for(auto &d:qAsConst(historyDirs))
     {
         auto *action=new QAction(d);
-        connect(action,&QAction::triggered,this,[this,action,menu](){
-            setCurrentDir(action->text());
-            int index=historyDirs.indexOf(currentDir);
-            historyDirs.removeAt(index);
-            historyDirs.push_front(currentDir);
-            menu->removeAction(action);
-            menu->insertAction(menu->actions().isEmpty()?nullptr:menu->actions().at(0),action);
-        });
+        addConnectionForActionDir(action);
         menu->addAction(action);
     }
 }
@@ -106,6 +102,19 @@ void MainWindow::saveOpenDirHistory()
 {
     auto settings=GlobalSettings::getInstance();
     settings->setValue("OPEN_DIR_HISTORY",historyDirs);
+}
+
+void MainWindow::addConnectionForActionDir(QAction *action)
+{
+    connect(action,&QAction::triggered,this,[this,action](){
+        auto menu=ui->actionRecent_Dirs_R->menu();
+        setCurrentDir(action->text());
+        int index=historyDirs.indexOf(currentDir);
+        historyDirs.removeAt(index);
+        historyDirs.push_front(currentDir);
+        menu->removeAction(action);
+        menu->insertAction(menu->actions().isEmpty()?nullptr:menu->actions().at(0),action);
+    });
 }
 
 void MainWindow::playSwitchAnimation(QWidget *page, bool direction)

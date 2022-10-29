@@ -166,7 +166,7 @@
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="QLineEdit" name="confLineEdit">
+    <widget class="QLineEdit" name="publicationLineEdit">
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
@@ -206,7 +206,7 @@
    <item row="3" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>Conference: </string>
+      <string>Publication: </string>
      </property>
     </widget>
    </item>
