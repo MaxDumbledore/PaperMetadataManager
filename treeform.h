@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QStandardItemModel>
+#include <QMenu>
 
 namespace Ui {
 class TreeForm;
@@ -22,6 +23,9 @@ public:
 
 private:
     Ui::TreeForm *ui;
+    QMenu *contextMenu;
+    void buildModelItemRecursively(QStandardItem *item);
+    QStandardItem * buildItemLine(int nodeId, QStandardItem *pa=nullptr, int row=0);
 };
 
 #endif // TREEFORM_H

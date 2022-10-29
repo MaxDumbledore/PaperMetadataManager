@@ -65,22 +65,6 @@ void TreeNodeManager::saveAndQuit()
         i->saveToFile();
 }
 
-
-
-QStandardItem *TreeNodeManager::buildModelItemRecursively(int curId)
-{
-    auto item=new QStandardItem(nodes[curId]->getName());
-    item->setEditable(false);
-    auto aspectId=qobject_cast<ConceptNode *>(nodes[curId])->getSelectedAspectId();
-    if(aspectId==-1)
-        return item;
-//    qDebug()<<aspectId;
-    auto childList=nodes[aspectId]->getNodeChilds();
-    for(int i=0;i<childList.size();i++)
-        item->setChild(i,0,buildModelItemRecursively(childList.at(i)));
-    return item;
-}
-
 int TreeNodeManager::findFirstContainedByNodeName(int curId, const QString &s)
 {
     if(nodes[curId]->getName().contains(s))

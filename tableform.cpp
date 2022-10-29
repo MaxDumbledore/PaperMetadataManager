@@ -45,7 +45,7 @@ TableForm::TableForm(QWidget *parent) :
     ui->tableView->verticalHeader()->setDefaultSectionSize(20);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setSortingEnabled(true);
-    ui->tableView->horizontalHeader() ->setSortIndicatorShown(false);
+    ui->tableView->horizontalHeader()->setSortIndicatorShown(false);
 
     connect(ui->tableView,&QTableView::doubleClicked,this,[this](const QModelIndex &index){
         auto columnTitle=ui->tableView->model()->headerData(index.column(),Qt::Horizontal).toString();
@@ -151,6 +151,7 @@ TableForm::TableForm(QWidget *parent) :
 
     connect(ui->resetBtn,&QToolButton::clicked,this,[this](){
         ui->filterLineEdit->clear();
+        emit ui->filterLineEdit->returnPressed();
         ui->kvQuerySetterForm->clear();
     });
 }

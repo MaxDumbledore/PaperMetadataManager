@@ -36,8 +36,6 @@ public:
         return rootId;
     }
 
-    QStandardItem * buildModelItemRecursively(int curId);
-
     int findFirstContainedByNodeName(int curId, const QString &s);
 
 signals:
